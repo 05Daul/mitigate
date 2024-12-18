@@ -1,0 +1,45 @@
+spring:
+  application:
+    name:mimigate
+
+  cloud:
+    gateway:
+      routes:
+#        - id: Rental
+#          uri : http://127.0.0.1:5678
+#          # ??? ????
+#          predicates:
+#            - Path=/first_service/**
+##          filters:
+##            - AddRequestHeader=mydata, bts
+##            - AddResponseHeader=responseHeander, test
+#
+#        - id: Mypage
+#          uri : http://127.0.0.1:5679
+#          # ??? ????
+#          predicates:
+#            # path? /first? ??? ??? ??? ??? uri? ????.
+#            - Path=/secondservice/**
+##          filters:
+##            - AddRequestHeader=secondreq, bts2
+##            - AddResponseHeader=secondres, test2
+        - id: equipment
+          uri : http://127.0.0.1:5680
+          # ??? ????
+          predicates:
+            # path? /first? ??? ??? ??? ??? uri? ????.
+            - Path=/equipment/**
+##          filters:
+##            - AddRequestHeader=secondreq, bts2
+##            - AddResponseHeader=secondres, test2
+
+server:
+  port: 5676
+
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://127.0.0.1:5677/eureka
+
