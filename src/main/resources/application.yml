@@ -1,37 +1,48 @@
 spring:
   application:
-    name:mimigate
+   name: mimigate
 
   cloud:
     gateway:
+
       routes:
-        - id: rental
-          uri : http://127.0.0.1:5678
+        - id: mimi-rental
+          uri: lb://mimi-rental
           predicates:
             - Path=/rental/**
-##          filters:
-        - id: users
-          uri : http://127.0.0.1:5679
+        - id: mimi-users
+          uri: lb://mimi-users
           predicates:
             - Path=/users/**
-##          filters:
-        - id: equipment
-          uri : http://127.0.0.1:5680
+        - id: mimi-equipment
+          uri: lb://mimi-equipment
           predicates:
             - Path=/equipment/**
-##          filters:
+      default-filters:
+       - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
 
-        - id: fr
-          uri : http://127.0.0.1:5675
-          predicates:
-            - Path=/frt/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: 'http://127.0.0.1:5675'
+            allow-credentials: true
+            allowedHeaders: '*'
+            allowedMethods:
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - OPTIONS
+
 server:
   port: 5676
 
 eureka:
   client:
-    fetch-registry: false
-    register-with-eureka: false
+    fetch-registry: true
+    register-with-eureka: true
     service-url:
       defaultZone: http://127.0.0.1:5677/eureka
+#  instance:
+#    lease-renewal-interval-in-seconds: 2
 
