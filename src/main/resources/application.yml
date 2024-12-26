@@ -4,22 +4,37 @@ spring:
 
   cloud:
     gateway:
+      default-filters:
+        # 헤더의 중복을 제거하기 위한 필터
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: 'http://127.0.0.1:5675'
+            allow-credentials: true
+            allowedHeaders: '*'
+            allowedMethods:
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - OPTIONS
+            exposed-headers: "Authorization, userId"
       routes:
-#        - id: Rental
-#          uri : http://127.0.0.1:5678
+        - id: Rental
+          uri : http://127.0.0.1:5678
 #          # ??? ????
-#          predicates:
-#            - Path=/first_service/**
+          predicates:
+            - Path=/first_service/**
 ##          filters:
 ##            - AddRequestHeader=mydata, bts
 ##            - AddResponseHeader=responseHeander, test
 #
-#        - id: Mypage
-#          uri : http://127.0.0.1:5679
-#          # ??? ????
-#          predicates:
-#            # path? /first? ??? ??? ??? ??? uri? ????.
-#            - Path=/secondservice/**
+        - id: user
+          #uri : http://127.0.0.1:5679
+          uri : lb://mimi-users
+          predicates:
+            - Path=/user/**
 ##          filters:
 ##            - AddRequestHeader=secondreq, bts2
 ##            - AddResponseHeader=secondres, test2
@@ -38,8 +53,10 @@ server:
 
 eureka:
   client:
-    fetch-registry: false
-    register-with-eureka: false
+    fetch-registry: true
+    register-with-eureka: true
     service-url:
       defaultZone: http://127.0.0.1:5677/eureka
+  instance:
+    appname: mimigate
 
